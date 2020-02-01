@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+
+{% block content%}
+
+<h3 class="ml-3 mt-3">Available products</h3>
+<div class="row ml-2 mr-2">
+    <div class="col">
+        <table class="table">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Available Items</th>
+                <th scope="col">Buy</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for product in products %}
+                <tr>
+                <th scope="row">{{ product.name }}</th>
+                <td>{{ product.price }}</td>
+                <td>{{ product.availableItems }}</td>
+                <td>
+                    <form action="add_item_to_cart/{{ product.id }}/" method="post">
+                    <button type="submit" class="btn btn-sm btn-link">Add To Cart</button>
+                    </form>
+                </td>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+</div>
+
+<h3 class="ml-3 mt-3">Order History</h3>
+<div class="row ml-2 mr-2">
+    <div class="col">
+        <table class="table">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col">Order ID</th>
+                <th scope="col">Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for order in order_history %}
+                <tr>
+                <th scope="row">{{ order.id }}</th>
+                <td>{{ order.date }}</td>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}
