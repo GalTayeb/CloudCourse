@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
@@ -40,14 +40,17 @@ def orders(request):
 
 def cart(request):
     total = 0
-    current_order = Order.objects.get(status=False)
-    current_cart = current_order.listOfProducts.all()
-    for product in current_order.listOfProducts.all():
-        total += product.price
-    return render(request, 'main/cart.html', {
-        "current_cart": current_cart,
-        "total": total
-    })
+    if Order.objects.all().filter(status=False):
+        current_order = Order.objects.get(status=False)
+        current_cart = current_order.listOfProducts.all()
+        for product in current_order.listOfProducts.all():
+            total += product.price
+        return render(request, 'main/cart.html', {
+            "current_cart": current_cart,
+            "total": total
+        })
+    else:
+        return render(request, 'main/nocart.html')
 
 
 @csrf_exempt
@@ -70,4 +73,12 @@ def add_item_to_cart(request, product_id):
         current_order = Order.objects.create(date=timezone.now(), status=False)
     product = Product.objects.get(id=product_id)
     current_order.listOfProducts.add(product)
+    return HttpResponseRedirect("/cart")
+
+
+@csrf_exempt
+def delete_item_from_cart(request, product_id):
+    current_order = Order.objects.get(status=False)
+    product = Product.objects.get(id=product_id)
+    current_order.listOfProducts.remove(product)
     return HttpResponseRedirect("/cart")
