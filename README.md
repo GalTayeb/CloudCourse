@@ -1,7 +1,6 @@
 # CloudCourse
-Install python3 and git
 
-requirements: (install using pip3 install)
+Requirements: (install using pip3 install)
 - django
 - virtualenv
 - psycopg2
